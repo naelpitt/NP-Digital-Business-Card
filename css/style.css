@@ -315,28 +315,37 @@ CENTER FILTER ABSOLUTE
 /*              */
 /*              */
 
+/*              */
+/* MAP LOCATION */
+/*              */
+
 .card--map {
-  /* Match outer card rounded corners */
-  border-radius: 32px;
+  /* CRITICAL: Traps Mapbox's absolutely positioned canvas inside this card */
+  position: relative;
   
-  /* Standard overflow clipping */
+  border-radius: 32px;
   overflow: hidden;
   
-  /* Force hardware-accelerated clipping to 32px rounded boundary */
+  /* Standard and WebKit fallback clipping */
+  -webkit-clip-path: inset(0 round 32px);
   clip-path: inset(0 round 32px);
 
-  /* Card visual styling */
   box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
 }
 
 #map {
-  /* Fill card bounds */
   width: 100%;
   height: 100%;
+  /* Rounds the immediate map container */
+  border-radius: 32px;
 }
 
-
+/* Force the WebGL canvas itself to round, overriding Mapbox JS inline styles */
+.mapboxgl-canvas,
+.mapboxgl-canvas-container {
+  border-radius: 32px !important;
+}
 
 .mapboxgl-ctrl-logo {
   /* Hide default Mapbox logo */
