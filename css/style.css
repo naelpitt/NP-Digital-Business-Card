@@ -313,12 +313,8 @@ CENTER FILTER ABSOLUTE
 /* MAP LOCATION               */
 /* ========================== */
 
-/* ========================== */
-/* MAP LOCATION               */
-/* ========================== */
-
 .card--map {
-  /* Resets padding and applies card border rounding with forced overflow clipping */
+  /* Resets padding and applies the 32px border radius to the outer card */
   padding: 0;
   border-radius: 32px;
   box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
