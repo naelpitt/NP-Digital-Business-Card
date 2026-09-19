@@ -316,26 +316,40 @@ CENTER FILTER ABSOLUTE
 /*              */
 
 .card--map {
-  /* Reset padding using valid CSS value */
+  /* Establish positioning context for Mapbox absolute children */
+  position: relative;
+
+  /* Reset padding */
   padding: 0;
-  
-  /* Apply card rounding and hide overflow */
+
+  /* Card corner rounding and standard clipping */
   border-radius: 32px;
   overflow: hidden !important;
-  
-  /* Force GPU compositing layer to clip the WebGL canvas */
+
+  /* Force WebKit/Blink to clip the WebGL canvas layer */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+
+  /* Force GPU compositing layer */
   transform: translateZ(0);
   isolation: isolate;
-  
-  /* Card aesthetics */
+
+  /* Card shadow and background */
   box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
 }
 
 #map {
-  /* Ensure map container fills parent and inherits clipping */
+  /* Fill outer card container */
   width: 100%;
   height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* Directly target Mapbox internal containers and canvas element */
+#map .mapboxgl-canvas-container,
+#map .mapboxgl-canvas {
   border-radius: 32px;
   overflow: hidden;
 }
