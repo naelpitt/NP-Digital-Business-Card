@@ -313,6 +313,10 @@ CENTER FILTER ABSOLUTE
 /* MAP LOCATION               */
 /* ========================== */
 
+/* ========================== */
+/* MAP LOCATION               */
+/* ========================== */
+
 .card--map {
   /* Resets padding and applies card border rounding with forced overflow clipping */
   padding: 0;
@@ -329,8 +333,8 @@ CENTER FILTER ABSOLUTE
 }
 
 .mapboxgl-canvas {
-  /* Rounds the WebGL canvas layer directly to match the card corners */
-  border-radius: 32px;
+  /* Forces the WebGL canvas layer to round, overriding any script injections */
+  border-radius: 32px !important;
 }
 
 .mapboxgl-ctrl-logo {
