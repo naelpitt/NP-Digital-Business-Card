@@ -316,40 +316,40 @@ CENTER FILTER ABSOLUTE
 /*              */
 
 .card--map {
-  padding: none;
+  /* Reset padding using valid CSS value */
+  padding: 0;
+  
+  /* Apply card rounding and hide overflow */
   border-radius: 32px;
+  overflow: hidden !important;
+  
+  /* Force GPU compositing layer to clip the WebGL canvas */
+  transform: translateZ(0);
+  isolation: isolate;
+  
+  /* Card aesthetics */
   box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
-  overflow: hidden !important;
 }
 
 #map {
+  /* Ensure map container fills parent and inherits clipping */
   width: 100%;
   height: 100%;
-}
-
-.mapboxgl-canvas {
   border-radius: 32px;
+  overflow: hidden;
 }
 
 .mapboxgl-ctrl-logo {
+  /* Hide default Mapbox logo */
   visibility: hidden;
   position: absolute;
   pointer-events: none;
 }
 
 .zoom-btn {
+  /* Configure zoom button layout */
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  border: none;
-  background: rgb(0, 0, 0, 0.3);
-  padding: 8px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s;
-  z-index: 1;
 }
 
 .zoom-btn--out {
