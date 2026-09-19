@@ -24,18 +24,14 @@ const coords = [longitude, latitude];
 
 let mapStyle;
 let mapTheme;
-
+let mapInstance = null;
 
 const setMapStyle = function () {
-  const mapStyle = document.body.classList.contains(`dark`)
-    ? 'dark-v10'
-    : 'light-v10';
-  return mapStyle;
+  return document.body.classList.contains(`dark`) ? `dark-v10` : `light-v10`;
 };
 
 const setMapTheme = function () {
-  const mapTheme = `mapbox://styles/mapbox/${setMapStyle()}`;
-  return mapTheme;
+  return `mapbox://styles/mapbox/${setMapStyle()}`;
 };
 
 const mapZoom = getComputedStyle(document.body).getPropertyValue(
@@ -45,27 +41,30 @@ const mapIconSize = getComputedStyle(document.body).getPropertyValue(
   `--mapbox-icon-size`
 );
 
-const mobileDevice = getComputedStyle(document.body).getPropertyValue(
-  `--mobile-device`
+const mobileDevice = Number(
+  getComputedStyle(document.body)
+    .getPropertyValue(`--mobile-device`)
+    .trim()
 );
 
 function setupMap(coords) {
+  if (mapInstance) {
+    mapInstance.remove();
+    mapInstance = null;
+  }
+
   const map = new mapboxgl.Map({
     container: 'map',
     style: setMapTheme(),
-    // MAP THEMES
-    // light-v10
-    // dark-v10
-    // streets-v11
-    // navigation-day-v1
-    // navigation-night-v1
     attributionControl: false,
     center: coords,
     zoom: mapZoom,
   });
+
+  mapInstance = map;
   map.dragRotate.disable();
   map.touchPitch.disable();
-  if (mobileDevice == true) {
+  if (mobileDevice === 1) {
     map.dragPan.disable();
     map.scrollZoom.disable();
     map.doubleClickZoom.disable();
@@ -73,7 +72,6 @@ function setupMap(coords) {
   }
 
   map.on('load', () => {
-    // map.loadImage('img/memoji-map.png', (error, image) => {
     map.loadImage('img/bitmoji.png', (error, image) => {
       if (error) throw error;
       map.addImage('memoji', image);
@@ -124,12 +122,18 @@ let currentZoom = 0;
 const toggle = document.querySelector(`.toggle-container`);
 const body = document.querySelector(`body`);
 const card = document.querySelector(`.card`);
-toggle.addEventListener(`click`, function () {
-  toggle.classList.toggle(`dark`);
-  body.classList.toggle(`dark`);
-  // console.log(setMapStyle());
-  // console.log(setMapTheme());
+
+const applyTheme = function (theme) {
+  const isDark = theme === 'dark';
+  body.classList.toggle(`dark`, isDark);
+  toggle.classList.toggle(`dark`, isDark);
+  localStorage.setItem(`theme`, theme);
   setupMap(coords);
+};
+
+toggle.addEventListener(`click`, function () {
+  const nextTheme = body.classList.contains(`dark`) ? `light` : `dark`;
+  applyTheme(nextTheme);
 });
 
 //                         //
@@ -139,42 +143,28 @@ toggle.addEventListener(`click`, function () {
 //                         //
 
 function detectColorScheme() {
-  // CHECK LOCAL STORAGE FIRST
-  if (localStorage.getItem(`theme`)) {
-    if (localStorage.getItem(`theme`) == `dark`) {
-      body.classList.add(`dark`);
-      toggle.classList.add(`dark`);
-      setupMap(coords);
-    }
-    if (localStorage.getItem(`theme`) == `light`) {
-      body.classList.remove(`dark`);
-      toggle.classList.remove(`dark`);
-      setupMap(coords);
-    }
-    // CHECK SYSTEM PREFERENCES
-  } else if (!window.matchMedia) {
-    return false;
-  } else if (window.matchMedia(`(prefers-color-scheme: dark)`).matches) {
-    localStorage.setItem(`theme`, `dark`);
-    body.classList.add(`dark`);
-    toggle.classList.add(`dark`);
-    setupMap(coords);
+  const storedTheme = localStorage.getItem(`theme`);
+
+  if (storedTheme === `dark` || storedTheme === `light`) {
+    applyTheme(storedTheme);
+    return;
   }
-  // DETECT CHANGES AND RELOAD THEME
+
+  if (!window.matchMedia) {
+    return false;
+  }
+
+  if (window.matchMedia(`(prefers-color-scheme: dark)`).matches) {
+    applyTheme(`dark`);
+    return;
+  }
+
+  applyTheme(`light`);
+
   window
     .matchMedia(`(prefers-color-scheme: dark)`)
     .addEventListener(`change`, function (event) {
-      const colorScheme = event.matches ? `dark` : `light`;
-
-      if (colorScheme === 'dark') {
-        body.classList.add(`dark`);
-        toggle.classList.add(`dark`);
-        setupMap(coords);
-      } else {
-        body.classList.remove(`dark`);
-        toggle.classList.remove(`dark`);
-        setupMap(coords);
-      }
+      applyTheme(event.matches ? `dark` : `light`);
     });
 }
 detectColorScheme();
@@ -266,6 +256,7 @@ dotContainer.addEventListener(`click`, function (event) {
 
 const filterMain = document.querySelectorAll(`.filter`);
 const filterContainerMain = document.querySelector(`.filters-container-main`);
+const learnMoreButton = document.getElementById(`btn-learn-more`);
 
 const cardIntro = document.querySelector(`.card--intro`);
 const cardMap = document.querySelector(`.card--map`);
@@ -282,24 +273,45 @@ const introTextAll = document.getElementById(`intro-text-all`);
 const introTextAbout = document.getElementById(`intro-text-about`);
 const introTextContent = document.querySelectorAll(`.intro-text-content`);
 
+const updateLearnMoreVisibility = function (filterValue) {
+  if (!learnMoreButton) return;
+
+  const isProfileView = filterValue === `about`;
+  learnMoreButton.classList.toggle(`is-hidden`, isProfileView);
+  learnMoreButton.disabled = isProfileView;
+  learnMoreButton.setAttribute(`aria-hidden`, String(isProfileView));
+  learnMoreButton.setAttribute(`tabindex`, isProfileView ? `-1` : `0`);
+};
+
+const updateCardIds = function (filterValue) {
+  const cards = [
+    { element: cardIntro, base: `card--intro` },
+    { element: cardMap, base: `card--map` },
+    { element: cardPhotos, base: `card--photos` },
+    { element: cardSkills, base: `card--skills` },
+    { element: cardLearning, base: `card--learning` },
+    { element: cardProj, base: `card--proj` },
+    { element: cardGithub, base: `card--github` },
+    { element: cardLinkedin, base: `card--linkedin` },
+    { element: cardRyos, base: `card--ryos` },
+    { element: cardRecipely, base: `card--recipely` },
+    { element: cardClock, base: `card--clock` },
+  ];
+
+  cards.forEach(({ element, base }) => {
+    if (element) {
+      element.setAttribute(`id`, `${base}--${filterValue}`);
+    }
+  });
+};
+
 filterContainerMain.addEventListener(`click`, function (event) {
   const clicked = event.target.closest(`.filter`);
   if (!clicked) return;
   filterMain.forEach(filter => filter.classList.remove(`active`));
   clicked.classList.add(`active`);
-  cardIntro.setAttribute(`id`, `card--intro--${clicked.dataset.filter}`);
-  cardMap.setAttribute(`id`, `card--map--${clicked.dataset.filter}`);
-  cardPhotos.setAttribute(`id`, `card--photos--${clicked.dataset.filter}`);
-  cardSkills.setAttribute(`id`, `card--skills--${clicked.dataset.filter}`);
-  cardLearning.setAttribute(`id`, `card--learning--${clicked.dataset.filter}`);
-  cardProj.setAttribute(`id`, `card--proj--${clicked.dataset.filter}`);
-  cardGithub.setAttribute(`id`, `card--github--${clicked.dataset.filter}`);
-  cardLinkedin.setAttribute(`id`, `card--linkedin--${clicked.dataset.filter}`);
-  cardRyos.setAttribute(`id`, `card--ryos--${clicked.dataset.filter}`);
-  cardRecipely.setAttribute(`id`, `card--recipely--${clicked.dataset.filter}`);
-  cardClock.setAttribute(`id`, `card--clock--${clicked.dataset.filter}`);
-  
-
+  updateCardIds(clicked.dataset.filter);
+  updateLearnMoreVisibility(clicked.dataset.filter);
 
   // CHANGE PHOTO ON FILTER CHANGE
   const randomSlide = Math.floor(Math.random() * maxSlide);
@@ -319,6 +331,8 @@ filterContainerMain.addEventListener(`click`, function (event) {
   }
 });
 
+updateLearnMoreVisibility(`all`);
+
 
 //                  //
 //                  //
@@ -331,6 +345,8 @@ const projView = document.querySelectorAll(`.proj-view`);
 const shoeImage = document.querySelectorAll(`.proj-view-image`);
 
 const projRotation = function () {
+  if (!projContainer || !projView.length || !shoeImage.length) return;
+
   projContainer.addEventListener(`click`, function (event) {
     const clicked = event.target.closest(`.proj-view`);
     if (!clicked) return;
@@ -343,9 +359,12 @@ const projRotation = function () {
     );
     // ADD ACTIVE CLASS
     clicked.classList.add(`proj-view--active`);
-    document
-      .querySelector(`.proj-view-image--${clicked.dataset.shoe}`)
-      .classList.add(`proj-view-image--active`);
+    const activeImage = document.querySelector(
+      `.proj-view-image--${clicked.dataset.shoe}`
+    );
+    if (activeImage) {
+      activeImage.classList.add(`proj-view-image--active`);
+    }
   });
 };
 projRotation();
@@ -358,25 +377,35 @@ projRotation();
 
 
 function updateTime() {
+  const timeElement = document.getElementById('time');
+  const dayElement = document.getElementById('day');
+  const dateElement = document.getElementById('date');
+  const greetingElement = document.getElementById('greeting');
+
+  if (!timeElement || !dayElement || !dateElement) return;
+
   const now = new Date();
   const timeString = now.toLocaleTimeString('en-GB', { hour12: false });
   const dayString = now.toLocaleDateString('en-GB', { weekday: 'long' });
   const dateString = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
 
-  document.getElementById('time').textContent = timeString;
-  document.getElementById('day').textContent = dayString;
-  document.getElementById('date').textContent = dateString;
+  timeElement.textContent = timeString;
+  dayElement.textContent = dayString;
+  dateElement.textContent = dateString;
 
   const hours = now.getHours();
   let greeting;
   if (hours < 12) {
-    greeting = "Good Morning!";
+    greeting = 'Good Morning!';
   } else if (hours < 18) {
-    greeting = "Good Afternoon!";
+    greeting = 'Good Afternoon!';
   } else {
-    greeting = "Good Evening!";
+    greeting = 'Good Evening!';
   }
-  document.getElementById('greeting').textContent = greeting;
+
+  if (greetingElement) {
+    greetingElement.textContent = greeting;
+  }
 }
 
 setInterval(updateTime, 1000);

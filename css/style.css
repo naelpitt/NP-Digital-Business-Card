@@ -21,7 +21,7 @@ a {
   position: relative;
   max-width: 100%;
   grid-template-columns: repeat(4, 266px);
-  grid-template-rows: repeat(6, 266px);
+  grid-auto-rows: 266px; /* <-- This line removes empty space on desktop */
   column-gap: 24px;
   row-gap: 24px;
   margin-bottom: 80px;
@@ -223,8 +223,8 @@ CENTER FILTER ABSOLUTE
 
 .intro-text {
   margin-top: 10px;
-  font-size: 16px;
-  line-height: 1.4;
+  font-size: 18px;
+  line-height: 1.8;
   font-weight: 400;
   width: 48ch;
   text-align: center;
@@ -261,6 +261,15 @@ CENTER FILTER ABSOLUTE
 .intro-btn:hover {
   box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
   transform: scale(1.04);
+}
+
+.intro-btn.is-hidden {
+  display: none;
+}
+
+.intro-btn:disabled {
+  pointer-events: none;
+  cursor: default;
 }
 
 .intro-btn-primary {
@@ -632,34 +641,59 @@ strong {
 .proj-view:hover {
   background: linear-gradient(45deg, #e36577, #fcad37);
   -webkit-background-clip: text;
+  background-clip: text; /* Added standard property */
   -webkit-text-fill-color: transparent;
-}
-
-.proj-grid-right {
-  position: relative;
-}
-
-.proj-view-image {
-  position: absolute;
-  display: none;
-  transition: all var(--transition-delay);
-}
-
-.view-image {
-  width: 246px;
-  height: 138px;
-  border-radius: 16px;
-  box-shadow: inset 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
 }
 
 .proj-view--active {
   background: linear-gradient(45deg, #e36577, #fcad37);
   -webkit-background-clip: text;
+  background-clip: text; /* Added standard property */
   -webkit-text-fill-color: transparent;
 }
 
+/* =========================================
+   UPDATED IMAGE SIZING & ALIGNMENT
+   ========================================= */
+
+.proj-grid-right {
+  position: relative;
+  /* Removed flex properties since absolute positioning handles the alignment */
+}
+
+.proj-view-image {
+  position: absolute;
+  top: 50%; /* Pushes the starting point to the middle of the container */
+  right: 0; /* Pins the image to the right edge */
+  transform: translateY(-60%); /* Pulls the image UP by exactly half of its own height to perfectly center it */
+  display: none;
+  transition: all var(--transition-delay);
+}
+
+/* Force visibility when active */
 .proj-view-image--active {
-  display: contents;
+  display: block;
+}
+
+.view-image {
+  width: 380px;
+  height: 214px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.15);
+}
+
+/* Changed from 'contents' to 'block' to respect absolute positioning and sizing */
+.proj-view-image--active {
+  display: block;
+}
+
+.view-image {
+  width: 380px;  /* Increased significantly from 246px */
+  height: 214px; /* Scaled proportionally to maintain aspect ratio */
+  border-radius: 16px;
+  object-fit: cover; /* Ensures the image fills the space without squishing */
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.15); /* Slightly darker shadow for a better pop effect */
 }
 
 /*              */
@@ -802,73 +836,77 @@ strong {
 
 
 
-/*        */
-/*        */
-/* DATE TIME */
-/*        */
-/*        */
+/* ==========================
+   DATE & TIME CLOCK CARD
+   ========================== */
 
+/* Main card wrapper for the clock widget */
 .card--clock {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
+/* Inner container filling the card to structure clock elements */
 .clock-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   border-radius: 32px;
   background-color: var(--card-color);
   transition: var(--transition-delay);
 }
 
+/* Day of the week display (e.g., Saturday) */
 #day {
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 600;
-  line-height: 1.0;
-  margin-left: -2px;
-  margin-top: 10px;
-  margin-bottom: 4px;
+  line-height: 1.2;
+  margin-top: 4px;
+  margin-bottom: 2px;
   color: var(--text-color);
   text-align: center;
 }
 
+/* Digital time display with gradient fill */
 #time {
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 400;
-  line-height: 1.0;
-  margin-left: -2px;
-  margin-top: -16px;
-  margin-bottom: 4px;
-  background: -webkit-linear-gradient(45deg, #e36577, #fcad37);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-}
-
-#date {
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 1.0;
-  margin-left: -2px;
-  margin-top: 5px;
-  margin-bottom: 4px;
-  color: var(--text-color);
-  text-align: center;
-}
-
-#greeting {
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 1.0;
-  margin-left: -2px;
-  margin-top: 10px;
-  margin-bottom: 4px;
+  line-height: 1.2;
+  margin-bottom: 2px;
   background: -webkit-linear-gradient(45deg, #e36577, #fcad37);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
+}
+
+/* Date display (e.g., 19 September) adjusted to prevent breaking */
+#date {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 4px;
+  color: var(--text-color);
+  text-align: center;
+  white-space: nowrap; /* Prevents month names from wrapping onto a new line */
+}
+
+/* Greeting display (e.g., Good Evening!) with gradient fill */
+#greeting {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: 2px;
+  background: -webkit-linear-gradient(45deg, #e36577, #fcad37);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  white-space: nowrap; /* Keeps greeting phrase on a single line */
 }
 
