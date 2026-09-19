@@ -326,11 +326,16 @@ CENTER FILTER ABSOLUTE
   /* Forces the map container to fill the parent card dimensions completely */
   width: 100%;
   height: 100%;
+  border-radius: 32px !important;
+  overflow: hidden !important;
 }
 
+/* Target Mapbox's internal generated wrappers to force clipping across all layers */
+.mapboxgl-map,
+.mapboxgl-canvas-container,
 .mapboxgl-canvas {
-  /* Forces the WebGL canvas layer to round, overriding any script injections */
   border-radius: 32px !important;
+  overflow: hidden !important;
 }
 
 .mapboxgl-ctrl-logo {
