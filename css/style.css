@@ -310,26 +310,17 @@ CENTER FILTER ABSOLUTE
 } */
 
 /*              */
-/*              */
-/* MAP LOCATION */
-/*              */
-/*              */
-
-/*              */
 /* MAP LOCATION */
 /*              */
 
 .card--map {
-  /* CRITICAL: Traps Mapbox's absolutely positioned canvas inside this card */
+  /* CRITICAL: Acts as a cage for Mapbox's absolute elements so overflow works */
   position: relative;
   
+  /* Standard card boundaries */
   border-radius: 32px;
   overflow: hidden;
   
-  /* Standard and WebKit fallback clipping */
-  -webkit-clip-path: inset(0 round 32px);
-  clip-path: inset(0 round 32px);
-
   box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
 }
@@ -337,10 +328,7 @@ CENTER FILTER ABSOLUTE
 #map {
   width: 100%;
   height: 100%;
-  /* Rounds the immediate map container */
-  border-radius: 32px;
 }
-
 /* Force the WebGL canvas itself to round, overriding Mapbox JS inline styles */
 .mapboxgl-canvas,
 .mapboxgl-canvas-container {
