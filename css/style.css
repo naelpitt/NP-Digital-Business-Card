@@ -336,12 +336,7 @@ CENTER FILTER ABSOLUTE
   height: 100%;
 }
 
-/* Directly target Mapbox internal containers and canvas element */
-#map .mapboxgl-canvas-container,
-#map .mapboxgl-canvas {
-  border-radius: 32px;
-  overflow: hidden;
-}
+
 
 .mapboxgl-ctrl-logo {
   /* Hide default Mapbox logo */
