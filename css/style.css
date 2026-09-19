@@ -322,6 +322,7 @@ CENTER FILTER ABSOLUTE
 }
 
 #map,
+.mapboxgl-map,
 .mapboxgl-canvas,
 .mapboxgl-canvas-container {
   width: 100%;
