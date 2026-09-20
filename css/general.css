@@ -71,7 +71,7 @@ body {
 
 body.dark {
   --banner-text: #1d1d1d;
-  --card-shadow: 0.2rem 0.4rem 12rem rgba(255, 255, 255, 0.4);
+  --card-shadow: 0.2rem 0.4rem 12rem rgba(255, 255, 255, 0.1);
 
   /* DARK MODE VARIABLES */
   --text-color: #fafafa;
