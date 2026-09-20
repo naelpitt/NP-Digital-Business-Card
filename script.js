@@ -2,7 +2,7 @@
 
 // CONTENTS //
 
-// MAP BOX API
+
 // TOGGLE NIGHTMODE / DAYMODE
 // DETECT THEME PREFERENCE
 // PHOTO SWIPPER
@@ -10,178 +10,12 @@
 // SECONDARY FILTER MENU FUNCTIONALITY
 // skill ROTATION
 
-//             //
-//             //
-// MAP BOX API //
-//             //
-//             //
 
-const mapboxToken =
-  'pk.eyJ1IjoibmFlbHBpdHQiLCJhIjoiY211OTRoMGk0MTR1cTJ4czd2ZnpnemhwMiJ9.p7deQ3PgbxhgvaWqpe7dcw';
+  
 
-if (typeof mapboxgl !== 'undefined' && mapboxToken) {
-  mapboxgl.accessToken = mapboxToken;
-}
 
-const latitude = 54.975170;
-const longitude = -1.622539;
-const coords = [longitude, latitude];
 
-let mapStyle;
-let mapTheme;
-let mapInstance = null;
 
-const setMapStyle = function () {
-  return document.body.classList.contains(`dark`) ? `dark-v10` : `light-v10`;
-};
-
-const setMapTheme = function () {
-  return `mapbox://styles/mapbox/${setMapStyle()}`;
-};
-
-const mapZoom = getComputedStyle(document.body).getPropertyValue(
-  '--mapbox-zoom'
-);
-const mapIconSize = getComputedStyle(document.body).getPropertyValue(
-  `--mapbox-icon-size`
-);
-
-const mobileDevice = Number(
-  getComputedStyle(document.body)
-    .getPropertyValue(`--mobile-device`)
-    .trim()
-);
-
-function applyMapCorners() {
-  const mapCanvas = document.querySelector('#map .mapboxgl-canvas');
-  const mapContainer = document.querySelector('#map .mapboxgl-map');
-  const mapWrap = document.querySelector('#map');
-
-  if (mapWrap) {
-    mapWrap.style.borderRadius = '32px';
-    mapWrap.style.overflow = 'hidden';
-  }
-
-  if (mapContainer) {
-    mapContainer.style.setProperty('border-radius', '32px', 'important');
-    mapContainer.style.setProperty('overflow', 'hidden', 'important');
-  }
-
-  if (mapCanvas) {
-    mapCanvas.style.setProperty('border-radius', '32px', 'important');
-    mapCanvas.style.setProperty('overflow', 'hidden', 'important');
-    mapCanvas.style.setProperty('clip-path', 'inset(0 round 32px)', 'important');
-  }
-}
-
-function setupMap(coords) {
-  const mapEl = document.getElementById('map');
-  if (!mapEl) return;
-
-  mapEl.classList.remove('map-fallback');
-
-  if (typeof mapboxgl === 'undefined' || !mapboxToken) {
-    mapEl.classList.add('map-fallback');
-    return;
-  }
-
-  if (mapInstance) {
-    mapInstance.remove();
-    mapInstance = null;
-  }
-
-  const map = new mapboxgl.Map({
-    container: 'map',
-    style: setMapTheme(),
-    attributionControl: false,
-    center: coords,
-    zoom: mapZoom,
-  });
-
-  mapInstance = map;
-  map.dragRotate.disable();
-  map.touchPitch.disable();
-  if (mobileDevice === 1) {
-    map.dragPan.disable();
-    map.scrollZoom.disable();
-    map.doubleClickZoom.disable();
-    map.touchZoomRotate.disable();
-  }
-
-  map.on('error', () => {
-    mapEl.classList.add('map-fallback');
-  });
-
-  map.on('load', () => {
-    applyMapCorners();
-    mapEl.classList.remove('map-fallback');
-
-    map.loadImage('img/bitmoji.png', (error, image) => {
-      if (error) {
-        console.warn('Bitmoji image failed to load:', error);
-        return;
-      }
-      map.addImage('memoji', image);
-      map.addSource('point', {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              geometry: {
-                type: 'Point',
-                coordinates: [longitude, latitude],
-              },
-            },
-          ],
-        },
-      });
-      map.addLayer({
-        id: 'points',
-        type: 'symbol',
-        source: 'point',
-        layout: {
-          'icon-image': 'memoji',
-          'icon-size': Number(mapIconSize),
-        },
-      });
-    });
-  });
-}
-setupMap(coords);
-
-//                     //
-// MAP ZOOM IN AND OUT //
-//                     //
-
-const zoomIn = document.querySelector(`.zoom-btn--in`);
-const zoomOut = document.querySelector(`.zoom-btn--out`);
-
-let currentZoom = 0;
-
-//                            //
-//                            //
-// TOGGLE NIGHTMODE / DAYMODE //
-//                            //
-//                            //
-
-const toggle = document.querySelector(`.toggle-container`);
-const body = document.querySelector(`body`);
-const card = document.querySelector(`.card`);
-
-const applyTheme = function (theme) {
-  const isDark = theme === 'dark';
-  body.classList.toggle(`dark`, isDark);
-  toggle.classList.toggle(`dark`, isDark);
-  localStorage.setItem(`theme`, theme);
-  setupMap(coords);
-};
-
-toggle.addEventListener(`click`, function () {
-  const nextTheme = body.classList.contains(`dark`) ? `light` : `dark`;
-  applyTheme(nextTheme);
-});
 
 //                         //
 //                         //
