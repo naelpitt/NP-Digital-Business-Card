@@ -47,6 +47,28 @@ const mobileDevice = Number(
     .trim()
 );
 
+function applyMapCorners() {
+  const mapCanvas = document.querySelector('#map .mapboxgl-canvas');
+  const mapContainer = document.querySelector('#map .mapboxgl-map');
+  const mapWrap = document.querySelector('#map');
+
+  if (mapWrap) {
+    mapWrap.style.borderRadius = '32px';
+    mapWrap.style.overflow = 'hidden';
+  }
+
+  if (mapContainer) {
+    mapContainer.style.setProperty('border-radius', '32px', 'important');
+    mapContainer.style.setProperty('overflow', 'hidden', 'important');
+  }
+
+  if (mapCanvas) {
+    mapCanvas.style.setProperty('border-radius', '32px', 'important');
+    mapCanvas.style.setProperty('overflow', 'hidden', 'important');
+    mapCanvas.style.setProperty('clip-path', 'inset(0 round 32px)', 'important');
+  }
+}
+
 function setupMap(coords) {
   if (mapInstance) {
     mapInstance.remove();
@@ -72,6 +94,8 @@ function setupMap(coords) {
   }
 
   map.on('load', () => {
+    applyMapCorners();
+
     map.loadImage('img/bitmoji.png', (error, image) => {
       if (error) throw error;
       map.addImage('memoji', image);

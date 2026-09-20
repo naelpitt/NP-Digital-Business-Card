@@ -313,29 +313,31 @@ CENTER FILTER ABSOLUTE
 /* MAP LOCATION               */
 /* ========================== */
 
+/* ========================== */
+/* MAP LOCATION FALLBACK MASK */
+/* ========================== */
+
 .card--map {
-  /* Reset padding and keep the whole map card clipped to a rounded shape */
+  /* Forces the container to act as a rigid clipping boundary */
+  position: relative;
   padding: 0;
   border-radius: 32px;
-  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
-  overflow: hidden;
+  background-color: #1a1a1a; /* Matches your dark map theme */
+  
+  /* CRITICAL: Hides anything that overflows the 32px boundary */
+  overflow: hidden !important;
+  
+  /* Forces modern browsers to composite the clipping mask */
+  transform: translateZ(0);
 }
 
 #map {
-  /* Fill the card and keep the map canvas visually clipped to the card corners */
   width: 100%;
   height: 100%;
-  border-radius: 32px;
-  overflow: hidden;
+  border-radius: inherit; /* Inherits the 32px rounding from the parent card */
 }
 
-/* Keep the Mapbox generated wrapper rounded without forcing every internal layer */
-.mapboxgl-map,
-.mapboxgl-canvas-container {
-  border-radius: 32px;
-  overflow: hidden;
-}
+
 
 .mapboxgl-ctrl-logo {
   /* Hides the default Mapbox watermark logo */
@@ -504,7 +506,7 @@ CENTER FILTER ABSOLUTE
 }
 
 .running-statistic {
-  font-size: 16px;
+  font-size: 18px;
   pointer-events: none;
   line-height: 1.3; /* Adjust this value to increase the gap between lines */
 }
