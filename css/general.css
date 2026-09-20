@@ -234,6 +234,8 @@ body.dark {
 #card--map--all {
   grid-column: 1/5;
   grid-row: 3/4;
+  height: 360px;
+  min-height: 360px;
 }
 
 /* Hidden items on 'All' tab */

@@ -297,6 +297,14 @@ const introTextAll = document.getElementById(`intro-text-all`);
 const introTextAbout = document.getElementById(`intro-text-about`);
 const introTextContent = document.querySelectorAll(`.intro-text-content`);
 
+const refreshMapLayout = function () {
+  if (!mapInstance) return;
+
+  requestAnimationFrame(() => {
+    mapInstance.resize();
+  });
+};
+
 const updateLearnMoreVisibility = function (filterValue) {
   if (!learnMoreButton) return;
 
@@ -336,6 +344,7 @@ filterContainerMain.addEventListener(`click`, function (event) {
   clicked.classList.add(`active`);
   updateCardIds(clicked.dataset.filter);
   updateLearnMoreVisibility(clicked.dataset.filter);
+  refreshMapLayout();
 
   // CHANGE PHOTO ON FILTER CHANGE
   const randomSlide = Math.floor(Math.random() * maxSlide);
