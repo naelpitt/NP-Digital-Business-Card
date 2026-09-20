@@ -313,7 +313,20 @@ CENTER FILTER ABSOLUTE
 /* MAP LOCATION & MASKING     */
 /* ========================== */
 
-
+.card--spotify {
+  padding: 0;
+  border: none;
+  border-radius: 32px;
+  background: #df5b0e;
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 266px;
+  min-height: 266px;
+  display: flex;
+  align-items: stretch;
+}
 
 .card--spotify iframe {
   display: block;
