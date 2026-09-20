@@ -16,8 +16,13 @@
 //             //
 //             //
 
-mapboxgl.accessToken =
-  'pk.eyJ1IjoibmFlbHBpdHQiLCJhIjoiY211OTNhYjZ6MTAyOTJ3czJ5cGIwNGxwayJ9.r9-2yGC0FYDVz61zzLH7dg';
+const mapboxToken =
+  'pk.eyJ1IjoibmFlbHBpdHQiLCJhIjoiY211OTRoMGk0MTR1cTJ4czd2ZnpnemhwMiJ9.p7deQ3PgbxhgvaWqpe7dcw';
+
+if (typeof mapboxgl !== 'undefined' && mapboxToken) {
+  mapboxgl.accessToken = mapboxToken;
+}
+
 const latitude = 54.975170;
 const longitude = -1.622539;
 const coords = [longitude, latitude];
@@ -70,6 +75,16 @@ function applyMapCorners() {
 }
 
 function setupMap(coords) {
+  const mapEl = document.getElementById('map');
+  if (!mapEl) return;
+
+  mapEl.classList.remove('map-fallback');
+
+  if (typeof mapboxgl === 'undefined' || !mapboxToken) {
+    mapEl.classList.add('map-fallback');
+    return;
+  }
+
   if (mapInstance) {
     mapInstance.remove();
     mapInstance = null;
@@ -93,11 +108,19 @@ function setupMap(coords) {
     map.touchZoomRotate.disable();
   }
 
+  map.on('error', () => {
+    mapEl.classList.add('map-fallback');
+  });
+
   map.on('load', () => {
     applyMapCorners();
+    mapEl.classList.remove('map-fallback');
 
     map.loadImage('img/bitmoji.png', (error, image) => {
-      if (error) throw error;
+      if (error) {
+        console.warn('Bitmoji image failed to load:', error);
+        return;
+      }
       map.addImage('memoji', image);
       map.addSource('point', {
         type: 'geojson',

@@ -330,7 +330,19 @@ CENTER FILTER ABSOLUTE
   min-height: 100%;
   border-radius: 32px !important;
   overflow: hidden !important;
-  background: transparent;
+  background: #1f1f1f;
+  position: relative;
+}
+
+#map.map-fallback {
+  background: linear-gradient(135deg, #1a1a1a, #2b2b2b);
+}
+
+#map.map-fallback .mapboxgl-map,
+#map.map-fallback .mapboxgl-canvas-container,
+#map.map-fallback .mapboxgl-canvas,
+#map.map-fallback canvas {
+  display: none !important;
 }
 
 /* Forces rounding across ALL internal Mapbox generated wrappers and canvases permanently */
@@ -344,7 +356,16 @@ CENTER FILTER ABSOLUTE
   display: block !important;
   border-radius: 32px !important;
   overflow: hidden !important;
-  clip-path: inset(0 round 32px);
+  clip-path: inset(0 round 32px) !important;
+}
+
+#map .mapboxgl-map,
+#map .mapboxgl-canvas-container,
+#map .mapboxgl-canvas,
+#map canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  background: transparent !important;
 }
 
 .mapboxgl-map,
