@@ -22,8 +22,8 @@ a {
   max-width: 100%;
   grid-template-columns: repeat(4, 266px);
   grid-auto-rows: 266px; /* <-- This line removes empty space on desktop */
-  column-gap: 24px;
-  row-gap: 24px;
+  column-gap: 20px;
+  row-gap: 15px;
   margin-bottom: 80px;
 }
 
@@ -314,26 +314,25 @@ CENTER FILTER ABSOLUTE
 /* ========================== */
 
 .card--spotify {
-  padding: 0;
-  border: none;
+  padding: 0px;
   border-radius: 32px;
-  background: #df5b0e;
-  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
+  background: transparent;
   overflow: hidden;
   position: relative;
   width: 100%;
-  height: 266px;
-  min-height: 266px;
-  display: flex;
-  align-items: stretch;
+  height: 103% !important;
+  min-height: 100% !important;
+  display: block;
 }
+
 
 .card--spotify iframe {
   display: block;
   width: 100%;
-  height: 100%;
-  min-height: 100%;
-  flex: 1 1 auto;
+  height: 100% ;
+  min-height: 99% !important;
+  
   border: 0;
   background: #df5b0e;
 }
@@ -968,4 +967,3 @@ strong {
   text-align: center;
   white-space: nowrap; /* Keeps greeting phrase on a single line */
 }
-
