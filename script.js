@@ -17,7 +17,7 @@
 //             //
 
 mapboxgl.accessToken =
-  'pk.eyJ1IjoibmFlbHBpdHQiLCJhIjoiY204MzR6YXBoMGpwdTJpczdrMDUxYzdtNiJ9.Lh11OMwHer0gJg-xMQYRnw';
+  'pk.eyJ1IjoibmFlbHBpdHQiLCJhIjoiY211OTNhYjZ6MTAyOTJ3czJ5cGIwNGxwayJ9.r9-2yGC0FYDVz61zzLH7dg';
 const latitude = 54.975170;
 const longitude = -1.622539;
 const coords = [longitude, latitude];
