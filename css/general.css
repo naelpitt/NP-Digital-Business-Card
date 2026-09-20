@@ -32,6 +32,7 @@ body {
   overscroll-behavior: none;
 
   --banner-text: #1d1d1d;
+  --card-shadow: 0.2rem 0.4rem 12rem rgba(0, 0, 0, 0.4);
 
   /* RESPONSIVENESS */
   --transition-delay: 0.5s;
@@ -70,6 +71,7 @@ body {
 
 body.dark {
   --banner-text: #1d1d1d;
+  --card-shadow: 0.2rem 0.4rem 12rem rgba(255, 255, 255, 0.4);
 
   /* DARK MODE VARIABLES */
   --text-color: #fafafa;

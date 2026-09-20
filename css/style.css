@@ -30,7 +30,7 @@ a {
 .card {
   border-radius: 32px;
   background-color: var(--card-color);
-  box-shadow: 0.2rem 0.4rem 12rem rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow);
   padding: 32px;
   transition: var(--transition-delay);
 }
