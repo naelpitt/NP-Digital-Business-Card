@@ -306,7 +306,7 @@ const filterContainerMain = document.querySelector(`.filters-container-main`);
 const learnMoreButton = document.getElementById(`btn-learn-more`);
 
 const cardIntro = document.querySelector(`.card--intro`);
-const cardMap = document.querySelector(`.card--map`);
+const cardSpotify = document.querySelector(`.card--spotify`);
 const cardPhotos = document.querySelector(`.card--photos`);
 const cardSkills = document.querySelector(`.card--skills`);
 const cardLearning = document.querySelector(`.card--learning`);
@@ -341,7 +341,7 @@ const updateLearnMoreVisibility = function (filterValue) {
 const updateCardIds = function (filterValue) {
   const cards = [
     { element: cardIntro, base: `card--intro` },
-    { element: cardMap, base: `card--map` },
+    { element: cardSpotify, base: `card--spotify` },
     { element: cardPhotos, base: `card--photos` },
     { element: cardSkills, base: `card--skills` },
     { element: cardLearning, base: `card--learning` },
