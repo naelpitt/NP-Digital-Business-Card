@@ -30,7 +30,7 @@ a {
 .card {
   border-radius: 32px;
   background-color: var(--card-color);
-  box-shadow: 0.2rem 0.4rem 12rem rgba(0, 0, 0, 0.08);
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
   padding: 32px;
   transition: var(--transition-delay);
 }
@@ -190,6 +190,7 @@ CENTER FILTER ABSOLUTE
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
 }
 
 .intro-heading {
@@ -340,7 +341,7 @@ CENTER FILTER ABSOLUTE
 .card--map {
   padding: 0;
   border-radius: 32px;
-  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
   background-color: #ffffff;
   overflow: hidden !important;
   position: relative;
@@ -428,7 +429,7 @@ CENTER FILTER ABSOLUTE
 .card--photos {
   padding: none;
   border-radius: 32px;
-  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
   position: relative;
   overflow: hidden;
 }
@@ -531,6 +532,7 @@ CENTER FILTER ABSOLUTE
 .card--skills {
   display: flex;
   flex-direction: column;
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
 }
 
 .filters-secondary {
@@ -805,12 +807,14 @@ strong {
 
 .card--github {
   background: #171515;
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
 }
 
 
 
 .card--linkedin {
   background: #5285ce;
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
 }
 
 
@@ -904,6 +908,7 @@ strong {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
 }
 
 /* Inner container filling the card to structure clock elements */
