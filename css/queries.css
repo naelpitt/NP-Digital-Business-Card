@@ -17,7 +17,6 @@
   .intro-text--placeholder-margin { margin-bottom: 148px; }
   .intro-btn { margin-top: 18px; }
   .intro-cta { font-size: 13.5px; padding: 6px 12px; }
-  body { --mapbox-zoom: 11.25; }
   .photo { width: 216px; height: 216px; }
   .filters-secondary { margin-bottom: 20px; }
   .filters-container-secondary { padding: 3px 4px 3px 4px; }
@@ -115,7 +114,6 @@
   .intro-text { font-size: 15px; width: 30ch; margin-left: 2px; margin-bottom: 16px; text-align: start; align-self: start; }
   .intro-text--placeholder-margin { margin-bottom: 76px; }
   .intro-cta { font-size: 15px; padding: 7px 14px; }
-  body { --mapbox-zoom: 11.75; --mapbox-icon-size: 0.26; }
   .photo { width: 360px; height: 360px; }
   .filters-secondary { margin-bottom: 32px; }
   .filters-container-secondary { padding: 4px 5px 4px 5px; }
@@ -225,7 +223,6 @@
   .card--intro { margin-top: -40px; }
   .intro-subheading { margin-bottom: 6px; }
   .intro-text--placeholder-margin { margin-bottom: 62px; }
-  body { --mapbox-zoom: 11.3; --mapbox-icon-size: 0.23; }
   .photo { width: 326px; height: 326px; }
   .filter-list-secondary { font-size: 15px; }
   .filters-secondary { margin-bottom: 24px; }
@@ -279,7 +276,6 @@
   .intro-subheading { font-size: 19px; margin-bottom: 0px; }
   .intro-text { font-size: 13.5px; margin-bottom: 10px; width: 29ch; }
   .intro-cta { font-size: 13px; padding: 6px 12px; }
-  body { --mapbox-zoom: 11.2; --mapbox-icon-size: 0.2; }
   .photo { width: 268px; height: 268px; }
   .filter-secondary { padding: 6px 12px; }
   .statistics-container { grid-template-rows: repeat(3, auto); }

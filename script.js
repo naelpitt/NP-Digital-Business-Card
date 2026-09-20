@@ -2,163 +2,12 @@
 
 // CONTENTS //
 
-// MAP BOX API
 // TOGGLE NIGHTMODE / DAYMODE
 // DETECT THEME PREFERENCE
 // PHOTO SWIPPER
 // MAIN FILTER MENU FUNCTIONALITY
 // SECONDARY FILTER MENU FUNCTIONALITY
 // skill ROTATION
-
-//             //
-//             //
-// MAP BOX API //
-//             //
-//             //
-
-const mapboxToken =
-  'pk.eyJ1IjoibmFlbHBpdHQiLCJhIjoiY211OTRoMGk0MTR1cTJ4czd2ZnpnemhwMiJ9.p7deQ3PgbxhgvaWqpe7dcw';
-
-if (typeof mapboxgl !== 'undefined' && mapboxToken) {
-  mapboxgl.accessToken = mapboxToken;
-}
-
-const latitude = 54.975170;
-const longitude = -1.622539;
-const coords = [longitude, latitude];
-
-let mapStyle;
-let mapTheme;
-let mapInstance = null;
-
-const setMapStyle = function () {
-  return document.body.classList.contains(`dark`) ? `dark-v10` : `light-v10`;
-};
-
-const setMapTheme = function () {
-  return `mapbox://styles/mapbox/${setMapStyle()}`;
-};
-
-const mapZoom = getComputedStyle(document.body).getPropertyValue(
-  '--mapbox-zoom'
-);
-const mapIconSize = getComputedStyle(document.body).getPropertyValue(
-  `--mapbox-icon-size`
-);
-
-const mobileDevice = Number(
-  getComputedStyle(document.body)
-    .getPropertyValue(`--mobile-device`)
-    .trim()
-);
-
-function applyMapCorners() {
-  const mapCanvas = document.querySelector('#map .mapboxgl-canvas');
-  const mapContainer = document.querySelector('#map .mapboxgl-map');
-  const mapWrap = document.querySelector('#map');
-
-  if (mapWrap) {
-    mapWrap.style.borderRadius = '32px';
-    mapWrap.style.overflow = 'hidden';
-  }
-
-  if (mapContainer) {
-    mapContainer.style.setProperty('border-radius', '32px', 'important');
-    mapContainer.style.setProperty('overflow', 'hidden', 'important');
-  }
-
-  if (mapCanvas) {
-    mapCanvas.style.setProperty('border-radius', '32px', 'important');
-    mapCanvas.style.setProperty('overflow', 'hidden', 'important');
-    mapCanvas.style.setProperty('clip-path', 'inset(0 round 32px)', 'important');
-  }
-}
-
-function setupMap(coords) {
-  const mapEl = document.getElementById('map');
-  if (!mapEl) return;
-
-  mapEl.classList.remove('map-fallback');
-
-  if (typeof mapboxgl === 'undefined' || !mapboxToken) {
-    mapEl.classList.add('map-fallback');
-    return;
-  }
-
-  if (mapInstance) {
-    mapInstance.remove();
-    mapInstance = null;
-  }
-
-  const map = new mapboxgl.Map({
-    container: 'map',
-    style: setMapTheme(),
-    attributionControl: false,
-    center: coords,
-    zoom: mapZoom,
-  });
-
-  mapInstance = map;
-  map.dragRotate.disable();
-  map.touchPitch.disable();
-  if (mobileDevice === 1) {
-    map.dragPan.disable();
-    map.scrollZoom.disable();
-    map.doubleClickZoom.disable();
-    map.touchZoomRotate.disable();
-  }
-
-  map.on('error', () => {
-    mapEl.classList.add('map-fallback');
-  });
-
-  map.on('load', () => {
-    applyMapCorners();
-    mapEl.classList.remove('map-fallback');
-
-    map.loadImage('img/bitmoji.png', (error, image) => {
-      if (error) {
-        console.warn('Bitmoji image failed to load:', error);
-        return;
-      }
-      map.addImage('memoji', image);
-      map.addSource('point', {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              geometry: {
-                type: 'Point',
-                coordinates: [longitude, latitude],
-              },
-            },
-          ],
-        },
-      });
-      map.addLayer({
-        id: 'points',
-        type: 'symbol',
-        source: 'point',
-        layout: {
-          'icon-image': 'memoji',
-          'icon-size': Number(mapIconSize),
-        },
-      });
-    });
-  });
-}
-setupMap(coords);
-
-//                     //
-// MAP ZOOM IN AND OUT //
-//                     //
-
-const zoomIn = document.querySelector(`.zoom-btn--in`);
-const zoomOut = document.querySelector(`.zoom-btn--out`);
-
-let currentZoom = 0;
 
 //                            //
 //                            //
@@ -168,20 +17,22 @@ let currentZoom = 0;
 
 const toggle = document.querySelector(`.toggle-container`);
 const body = document.querySelector(`body`);
-const card = document.querySelector(`.card`);
 
 const applyTheme = function (theme) {
   const isDark = theme === 'dark';
   body.classList.toggle(`dark`, isDark);
-  toggle.classList.toggle(`dark`, isDark);
+  if (toggle) {
+    toggle.classList.toggle(`dark`, isDark);
+  }
   localStorage.setItem(`theme`, theme);
-  setupMap(coords);
 };
 
-toggle.addEventListener(`click`, function () {
-  const nextTheme = body.classList.contains(`dark`) ? `light` : `dark`;
-  applyTheme(nextTheme);
-});
+if (toggle) {
+  toggle.addEventListener(`click`, function () {
+    const nextTheme = body.classList.contains(`dark`) ? `light` : `dark`;
+    applyTheme(nextTheme);
+  });
+}
 
 //                         //
 //                         //
@@ -226,6 +77,10 @@ const slides = document.querySelectorAll(`.slide`);
 const buttonLeft = document.querySelector(`.slider-btn--left`);
 const buttonRight = document.querySelector(`.slider-btn--right`);
 const dotContainer = document.querySelector(`.dots`);
+
+if (!slides.length) {
+  throw new Error(`No slides found on the page.`);
+}
 
 let currentSlide = Math.floor(Math.random() * slides.length);
 const maxSlide = slides.length;
@@ -309,24 +164,13 @@ const cardIntro = document.querySelector(`.card--intro`);
 const cardSpotify = document.querySelector(`.card--spotify`);
 const cardPhotos = document.querySelector(`.card--photos`);
 const cardSkills = document.querySelector(`.card--skills`);
-const cardLearning = document.querySelector(`.card--learning`);
 const cardProj = document.querySelector(`.card--proj`);
 const cardGithub = document.querySelector(`.card--github`);
 const cardLinkedin = document.querySelector(`.card--linkedin`);
-const cardRyos = document.querySelector(`.card--ryos`);
-const cardRecipely = document.querySelector(`.card--recipely`);
 const cardClock = document.querySelector(`.card--clock`);
 const introTextAll = document.getElementById(`intro-text-all`);
 const introTextAbout = document.getElementById(`intro-text-about`);
 const introTextContent = document.querySelectorAll(`.intro-text-content`);
-
-const refreshMapLayout = function () {
-  if (!mapInstance) return;
-
-  requestAnimationFrame(() => {
-    mapInstance.resize();
-  });
-};
 
 const updateLearnMoreVisibility = function (filterValue) {
   if (!learnMoreButton) return;
@@ -344,12 +188,9 @@ const updateCardIds = function (filterValue) {
     { element: cardSpotify, base: `card--spotify` },
     { element: cardPhotos, base: `card--photos` },
     { element: cardSkills, base: `card--skills` },
-    { element: cardLearning, base: `card--learning` },
     { element: cardProj, base: `card--proj` },
     { element: cardGithub, base: `card--github` },
     { element: cardLinkedin, base: `card--linkedin` },
-    { element: cardRyos, base: `card--ryos` },
-    { element: cardRecipely, base: `card--recipely` },
     { element: cardClock, base: `card--clock` },
   ];
 
@@ -367,7 +208,6 @@ filterContainerMain.addEventListener(`click`, function (event) {
   clicked.classList.add(`active`);
   updateCardIds(clicked.dataset.filter);
   updateLearnMoreVisibility(clicked.dataset.filter);
-  refreshMapLayout();
 
   // CHANGE PHOTO ON FILTER CHANGE
   const randomSlide = Math.floor(Math.random() * maxSlide);
@@ -483,24 +323,33 @@ const filterSecondaryContent = document.querySelectorAll(
   `.filter-secondary-content`
 );
 
-// Set the default active secondary filter on page load
-const defaultSecondaryFilter = filterSecondary[0]; // Assuming the first filter is the default
+const defaultSecondaryFilter = filterSecondary[0];
 if (defaultSecondaryFilter) {
-  defaultSecondaryFilter.classList.add(`active`);
-  document
-    .querySelector(`.filter-content--${defaultSecondaryFilter.dataset.filter}`)
-    .classList.add(`filter-content--active`);
+  defaultSecondaryFilter.classList.add(`active`, `filter-secondary--active`);
+  const defaultPanel = document.querySelector(
+    `.filter-content--${defaultSecondaryFilter.dataset.filter}`
+  );
+  if (defaultPanel) {
+    defaultPanel.classList.add(`filter-content--active`);
+  }
 }
 
-filterContainerSecondary.addEventListener(`click`, function (event) {
-  const clicked = event.target.closest(`.filter-secondary`);
-  if (!clicked) return;
-  filterSecondary.forEach(filter => filter.classList.remove(`active`));
-  filterSecondaryContent.forEach(filter =>
-    filter.classList.remove(`filter-content--active`)
-  );
-  clicked.classList.add(`active`);
-  document
-    .querySelector(`.filter-content--${clicked.dataset.filter}`)
-    .classList.add(`filter-content--active`);
-});
+if (filterContainerSecondary) {
+  filterContainerSecondary.addEventListener(`click`, function (event) {
+    const clicked = event.target.closest(`.filter-secondary`);
+    if (!clicked) return;
+    filterSecondary.forEach(filter => {
+      filter.classList.remove(`active`, `filter-secondary--active`);
+    });
+    filterSecondaryContent.forEach(filter =>
+      filter.classList.remove(`filter-content--active`)
+    );
+    clicked.classList.add(`active`, `filter-secondary--active`);
+    const targetPanel = document.querySelector(
+      `.filter-content--${clicked.dataset.filter}`
+    );
+    if (targetPanel) {
+      targetPanel.classList.add(`filter-content--active`);
+    }
+  });
+}

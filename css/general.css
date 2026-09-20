@@ -35,8 +35,6 @@ body {
 
   /* RESPONSIVENESS */
   --transition-delay: 0.5s;
-  --mapbox-zoom: 11.45;
-  --mapbox-icon-size: 0.25;
   --mobile-device: 0;
 
   /* LIGHT MODE VARIABLES */
