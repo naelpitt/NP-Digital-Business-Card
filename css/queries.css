@@ -61,6 +61,7 @@
   .learning-container { padding: 12px 0; }
   .learning-header { margin-bottom: 12px; }
   .learning-container:first-of-type { padding: 0 0 12px 0; }
+  .running-statistic { font-size: 18px; }
   .learning-course { font-size: 15px; }
   .proj-view { font-size: 21.5px; }
   .view-image { width: 210px; height: 118px; }
