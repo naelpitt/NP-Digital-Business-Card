@@ -316,7 +316,7 @@ CENTER FILTER ABSOLUTE
 .card--spotify {
   padding: 0px;
   border-radius: 32px;
-  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
+  box-shadow: var(--card-shadow);
   background: transparent;
   overflow: hidden;
   position: relative;
@@ -340,7 +340,7 @@ CENTER FILTER ABSOLUTE
 .card--map {
   padding: 0;
   border-radius: 32px;
-  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow);
   background-color: #ffffff;
   overflow: hidden !important;
   position: relative;
@@ -428,7 +428,7 @@ CENTER FILTER ABSOLUTE
 .card--photos {
   padding: none;
   border-radius: 32px;
-  box-shadow: 0.2rem 0.4rem 1.2rem rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow);
   position: relative;
   overflow: hidden;
 }
